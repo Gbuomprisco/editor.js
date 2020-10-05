@@ -2,7 +2,7 @@ import Module from '../../__module';
 import $ from '../../dom';
 import SelectionUtils from '../../selection';
 import * as _ from '../../utils';
-import { InlineTool, InlineToolConstructable, ToolConstructable, ToolSettings } from '../../../../types';
+import { BlockAPI, InlineTool, InlineToolConstructable, ToolConstructable, ToolSettings } from '../../../../types';
 import Flipper from '../../flipper';
 import I18n from '../../i18n';
 import { I18nInternalNS } from '../../i18n/namespace-internal';
@@ -140,13 +140,20 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
   public move(): void {
     const selectionRect = SelectionUtils.rect as DOMRect;
     const wrapperOffset = this.Editor.UI.nodes.wrapper.getBoundingClientRect();
+    const blockIndex = this.Editor.API.methods.blocks.getCurrentBlockIndex();
+    const block = this.Editor.API.methods.blocks.getBlockByIndex(blockIndex) as BlockAPI;
+    const blockElement = block.holder;
+    const blockElementPosition = blockElement.getBoundingClientRect();
+    const x = blockElementPosition.left + selectionRect.x - wrapperOffset.left;
+
+    const y =
+      selectionRect.y +
+      selectionRect.height +
+      this.toolbarVerticalMargin;
+
     const newCoords = {
-      x: selectionRect.x - wrapperOffset.left,
-      y: selectionRect.y +
-        selectionRect.height -
-        // + window.scrollY
-        wrapperOffset.top +
-        this.toolbarVerticalMargin,
+      x,
+      y,
     };
 
     /**
@@ -406,6 +413,8 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
      * Buttons will be filled on opening
      */
     this.enableFlipper();
+
+    document.body.appendChild(this.nodes.wrapper);
   }
 
   /**

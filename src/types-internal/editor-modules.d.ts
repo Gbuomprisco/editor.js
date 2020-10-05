@@ -10,7 +10,6 @@ import Shortcuts from '../components/modules/shortcuts';
 import Paste from '../components/modules/paste';
 import Notifier from '../components/modules/notifier';
 import Tooltip from '../components/modules/tooltip';
-import DragNDrop from '../components/modules/dragNDrop';
 import ModificationsObserver from '../components/modules/modificationsObserver';
 import Renderer from '../components/modules/renderer';
 import Sanitizer from '../components/modules/sanitizer';
@@ -53,7 +52,6 @@ export interface EditorModules {
   Events: Events;
   Shortcuts: Shortcuts;
   Paste: Paste;
-  DragNDrop: DragNDrop;
   ModificationsObserver: ModificationsObserver;
   Renderer: Renderer;
   Sanitizer: Sanitizer;

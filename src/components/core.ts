@@ -293,7 +293,6 @@ export default class Core {
       'InlineToolbar',
       'BlockManager',
       'Paste',
-      'DragNDrop',
       'ModificationsObserver',
       'BlockSelection',
       'RectangleSelection',

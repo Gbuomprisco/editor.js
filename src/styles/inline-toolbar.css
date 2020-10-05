@@ -1,5 +1,7 @@
 .ce-inline-toolbar {
   @apply --overlay-pane;
+
+  position: absolute;
   transform: translateX(-50%) translateY(8px) scale(0.9);
   opacity: 0;
   visibility: hidden;
