@@ -149,10 +149,6 @@ export default class UI extends Module<UINodes> {
      */
     this.make();
 
-    /**
-     * Loader for rendering process
-     */
-    this.addLoader();
 
     /**
      * Append SVG sprite
@@ -289,8 +285,6 @@ export default class UI extends Module<UINodes> {
     /**
      * Set customizable bottom zone height
      */
-    this.nodes.redactor.style.paddingBottom = this.config.minHeight + 'px';
-
     this.nodes.wrapper.appendChild(this.nodes.redactor);
     this.nodes.holder.appendChild(this.nodes.wrapper);
   }

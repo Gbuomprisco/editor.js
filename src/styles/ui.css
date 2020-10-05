@@ -48,7 +48,6 @@
 
   &__loader {
     position: relative;
-    height: 30vh;
 
     &::before {
       content: '';

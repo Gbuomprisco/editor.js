@@ -149,6 +149,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
     const y =
       selectionRect.y +
       selectionRect.height +
+      window.scrollY +
       this.toolbarVerticalMargin;
 
     const newCoords = {

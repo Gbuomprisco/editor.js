@@ -89,15 +89,10 @@ export default class Core {
           }
 
           /**
-           * Remove loader, show content
-           */
-          this.moduleInstances.UI.removeLoader();
-
-          /**
            * Resolve this.isReady promise
            */
           onReady();
-        }, 500);
+        }, 0);
       })
       .catch((error) => {
         _.log(`Editor.js is not ready because of ${error}`, 'error');
