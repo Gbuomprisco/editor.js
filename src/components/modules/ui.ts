@@ -511,10 +511,6 @@ export default class UI extends Module<UINodes> {
      * remove selected blocks
      */
     if (BlockSelection.anyBlockSelected && !Selection.isSelectionExists) {
-      const selectionPositionIndex = BlockManager.removeSelectedBlocks();
-
-      Caret.setToBlock(BlockManager.insertDefaultBlockAtIndex(selectionPositionIndex, true), Caret.positions.START);
-
       /** Clear selection */
       BlockSelection.clearSelection(event);
 
