@@ -107,8 +107,7 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
    * Destroys module
    */
   public destroy(): void {
-    this.flipper.deactivate();
-    this.flipper = null;
+    this.deactivateFlipper();
     this.removeAllNodes();
   }
 
@@ -176,7 +175,7 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
     this.buttons = [];
 
     /** Clear focus on active button */
-    this.flipper.deactivate();
+    this.deactivateFlipper();
   }
 
   /**
@@ -257,5 +256,11 @@ export default class BlockSettings extends Module<BlockSettingsNodes> {
         }, 50)();
       },
     } as FlipperOptions);
+  }
+
+  private deactivateFlipper(): void {
+    if (this.flipper) {
+      this.flipper.deactivate();
+    }
   }
 }

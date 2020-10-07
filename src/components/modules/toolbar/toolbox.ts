@@ -96,8 +96,7 @@ export default class Toolbox extends Module<ToolboxNodes> {
    * Destroy Module
    */
   public destroy(): void {
-    this.flipper.deactivate();
-    this.flipper = null;
+    this.deactivateFlipper();
     this.removeAllNodes();
   }
 
@@ -136,7 +135,7 @@ export default class Toolbox extends Module<ToolboxNodes> {
     this.Editor.UI.nodes.wrapper.classList.remove(this.CSS.openedToolbarHolderModifier);
 
     this.opened = false;
-    this.flipper.deactivate();
+    this.deactivateFlipper();
   }
 
   /**
@@ -341,5 +340,13 @@ export default class Toolbox extends Module<ToolboxNodes> {
      * close toolbar when node is changed
      */
     this.Editor.Toolbar.close();
+  }
+
+  private deactivateFlipper(): void {
+    if (this.flipper) {
+      this.flipper.deactivate();
+    }
+
+    this.flipper = null;
   }
 }

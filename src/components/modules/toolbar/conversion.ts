@@ -95,8 +95,7 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
    * Deactivates flipper and removes all nodes
    */
   public destroy(): void {
-    this.flipper.deactivate();
-    this.flipper = null;
+    this.deactivateFlipper();
     this.removeAllNodes();
   }
 
@@ -147,7 +146,7 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
    */
   public close(): void {
     this.opened = false;
-    this.flipper.deactivate();
+    this.deactivateFlipper();
     this.nodes.wrapper.classList.remove(ConversionToolbar.CSS.conversionToolbarShowed);
 
     if (typeof this.togglingCallback === 'function') {
@@ -346,5 +345,12 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
     this.flipper = new Flipper({
       focusedItemClass: ConversionToolbar.CSS.conversionToolFocused,
     });
+  }
+
+  private deactivateFlipper(): void {
+    if (this.flipper) {
+      this.flipper.deactivate();
+      this.flipper = null;
+    }
   }
 }

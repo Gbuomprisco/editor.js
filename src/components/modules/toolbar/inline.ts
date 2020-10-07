@@ -85,7 +85,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
   /**
    * Instance of class that responses for leafing buttons by arrows/tab
    */
-  private flipper: Flipper = null;
+  private flipper: Flipper | null = null;
 
   /**
    * Module preparation method
@@ -212,7 +212,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
 
     this.opened = false;
 
-    this.flipper.deactivate();
+    this.deactivateFlipper();
     this.Editor.ConversionToolbar.close();
   }
 
@@ -272,7 +272,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
    * Removes UI and its components
    */
   public destroy(): void {
-    this.flipper.deactivate();
+    this.deactivateFlipper();
     this.flipper = null;
 
     this.Editor.ConversionToolbar.destroy();
@@ -506,7 +506,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
         if (canActivateInlineToolbarFlipper) {
           this.flipper.activate();
         } else if (this.opened) {
-          this.flipper.deactivate();
+          this.deactivateFlipper();
         }
       });
     });
@@ -783,5 +783,11 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
       focusedItemClass: this.CSS.focusedButton,
       allowArrows: false,
     });
+  }
+
+  private deactivateFlipper(): void {
+    if (this.flipper) {
+      this.flipper.deactivate();
+    }
   }
 }
