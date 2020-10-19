@@ -214,7 +214,7 @@ export default class BlockEvents extends Module {
      * Don't handle Enter keydowns when Tool sets enableLineBreaks to true.
      * Uses for Tools like <code> where line breaks should be handled by default behaviour.
      */
-    if (tool && tool[Tools.INTERNAL_SETTINGS.IS_ENABLED_LINE_BREAKS]) {
+    if ((tool && tool[Tools.INTERNAL_SETTINGS.IS_ENABLED_LINE_BREAKS])) {
       return;
     }
 
@@ -229,7 +229,7 @@ export default class BlockEvents extends Module {
     /**
      * Allow to create linebreaks by Shift+Enter
      */
-    if (event.shiftKey || !this.config.multiBlock) {
+    if (event.shiftKey) {
       return;
     }
 

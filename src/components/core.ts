@@ -180,7 +180,6 @@ export default class Core {
       a: true,
     } as SanitizerConfig;
 
-    this.config.multiBlock = typeof this.config.multiBlock === undefined ? true : this.config.multiBlock;
     this.config.hideToolbar = this.config.hideToolbar ? this.config.hideToolbar : false;
     this.config.tools = this.config.tools || {};
     this.config.i18n = this.config.i18n || {};
