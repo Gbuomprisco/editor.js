@@ -59,7 +59,7 @@ export interface BlockTool extends BaseTool {
    * Called when the editor is destroyed
    */
   destroy?(): void;
-  
+
   /**
    * Lifecycle hooks
    */

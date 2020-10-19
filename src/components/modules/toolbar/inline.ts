@@ -88,6 +88,9 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
   private flipper: Flipper | null = null;
 
   /**
+   * Toggles read-only mode
+   *
+   * @param {boolean} readOnlyEnabled - read-only mode
    * Module preparation method
    */
   public async prepare(): Promise<void> {
@@ -205,7 +208,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
       /**
        * @todo replace 'clear' with 'destroy'
        */
-      if (typeof toolInstance.clear === 'function') {
+      if (_.isFunction(toolInstance.clear)) {
         toolInstance.clear();
       }
     });
@@ -414,8 +417,6 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
      * Buttons will be filled on opening
      */
     this.enableFlipper();
-
-    document.body.appendChild(this.nodes.wrapper);
   }
 
   /**
@@ -624,7 +625,7 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
     this.nodes.buttons.appendChild(button);
     this.toolsInstances.set(toolName, tool);
 
-    if (typeof tool.renderActions === 'function') {
+    if (_.isFunction(tool.renderActions)) {
       const actions = tool.renderActions();
 
       this.nodes.actions.appendChild(actions);

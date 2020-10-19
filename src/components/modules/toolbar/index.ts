@@ -140,22 +140,6 @@ export default class Toolbar extends Module<ToolbarNodes> {
   }
 
   /**
-   * Module preparation method
-   * Steps:
-   *  - Make Toolbar dependent components like BlockSettings, Toolbox and so on
-   *  - Make itself and append dependent nodes to itself
-   */
-  public async prepare(): Promise<void> {
-    /**
-     * Bind events on the Toolbar elements
-     */
-    if (!this.Editor.ReadOnly.isEnabled) {
-      this.drawUI();
-      this.enableModuleBindings();
-    }
-  }
-
-  /**
    * Toggles read-only mode
    *
    * @param {boolean} readOnlyEnabled - read-only mode
@@ -369,6 +353,11 @@ export default class Toolbar extends Module<ToolbarNodes> {
    *
    * Toolbar contains BlockSettings and Toolbox.
    * Thats why at first we draw its components and then Toolbar itself
+   *
+   * Steps:
+   *  - Make Toolbar dependent components like BlockSettings, Toolbox and so on
+   *  - Make itself and append dependent nodes to itself
+   *
    */
   private drawUI(): void {
     /**

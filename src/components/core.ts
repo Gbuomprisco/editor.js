@@ -180,6 +180,7 @@ export default class Core {
       a: true,
     } as SanitizerConfig;
 
+
     this.config.hideToolbar = this.config.hideToolbar ? this.config.hideToolbar : false;
     this.config.tools = this.config.tools || {};
     this.config.i18n = this.config.i18n || {};
@@ -211,6 +212,11 @@ export default class Core {
     if (config.i18n?.messages) {
       I18n.setDictionary(config.i18n.messages);
     }
+
+    /**
+     * Text direction. If not set, uses ltr
+     */
+    this.config.i18n.direction = config.i18n?.direction || 'ltr';
 
     /**
      * Text direction. If not set, uses ltr
@@ -331,7 +337,7 @@ export default class Core {
       /**
        * If module has non-default exports, passed object contains them all and default export as 'default' property
        */
-      const Module = typeof module === 'function' ? module : module.default;
+      const Module = _.isFunction(module) ? module : module.default;
 
       try {
         /**
