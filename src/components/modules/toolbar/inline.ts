@@ -417,6 +417,8 @@ export default class InlineToolbar extends Module<InlineToolbarNodes> {
      * Buttons will be filled on opening
      */
     this.enableFlipper();
+
+    document.body.appendChild(this.nodes.wrapper);
   }
 
   /**
