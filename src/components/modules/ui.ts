@@ -54,7 +54,7 @@ export default class UI extends Module<UINodes> {
   public get CSS(): {
     editorWrapper: string; editorWrapperNarrow: string; editorZone: string; editorZoneHidden: string;
     editorLoader: string; editorEmpty: string; editorRtlFix: string;
-    } {
+  } {
     return {
       editorWrapper: 'codex-editor',
       editorWrapperNarrow: 'codex-editor--narrow',
@@ -193,7 +193,7 @@ export default class UI extends Module<UINodes> {
    * Check if Editor is empty and set CSS class to wrapper
    */
   public checkEmptiness(): void {
-    const { BlockManager } = this.Editor;
+    const {BlockManager} = this.Editor;
 
     this.nodes.wrapper.classList.toggle(this.CSS.editorEmpty, BlockManager.isEditorEmpty);
   }
@@ -205,7 +205,7 @@ export default class UI extends Module<UINodes> {
    * @returns {boolean}
    */
   public get someToolbarOpened(): boolean {
-    const { Toolbox, BlockSettings, InlineToolbar, ConversionToolbar } = this.Editor;
+    const {Toolbox, BlockSettings, InlineToolbar, ConversionToolbar} = this.Editor;
 
     return BlockSettings.opened || InlineToolbar.opened || ConversionToolbar.opened || Toolbox.opened;
   }
@@ -233,7 +233,7 @@ export default class UI extends Module<UINodes> {
    * Close all Editor's toolbars
    */
   public closeAllToolbars(): void {
-    const { Toolbox, BlockSettings, InlineToolbar, ConversionToolbar } = this.Editor;
+    const {Toolbox, BlockSettings, InlineToolbar, ConversionToolbar} = this.Editor;
 
     BlockSettings.close();
     InlineToolbar.close();
@@ -264,7 +264,7 @@ export default class UI extends Module<UINodes> {
      */
     this.nodes.wrapper = $.make('div', [
       this.CSS.editorWrapper,
-      ...(this.isRtl ? [ this.CSS.editorRtlFix ] : []),
+      ...(this.isRtl ? [this.CSS.editorRtlFix] : []),
     ]);
     this.nodes.redactor = $.make('div', this.CSS.editorZone);
 
@@ -289,7 +289,7 @@ export default class UI extends Module<UINodes> {
     /**
      * Load CSS
      */
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
     const styles = require('../../styles/main.css');
     const styleTagId = 'editor-js-styles';
 
@@ -405,7 +405,7 @@ export default class UI extends Module<UINodes> {
    * @param {KeyboardEvent} event - keyboard event
    */
   private defaultBehaviour(event: KeyboardEvent): void {
-    const { currentBlock } = this.Editor.BlockManager;
+    const {currentBlock} = this.Editor.BlockManager;
     const keyDownOnEditor = (event.target as HTMLElement).closest(`.${this.CSS.editorWrapper}`);
     const isMetaKey = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
 
@@ -440,7 +440,7 @@ export default class UI extends Module<UINodes> {
    * @param {KeyboardEvent} event - keyboard event
    */
   private backspacePressed(event: KeyboardEvent): void {
-    const { BlockManager, BlockSelection, Caret } = this.Editor;
+    const {BlockManager, BlockSelection, Caret} = this.Editor;
 
     /**
      * If any block selected and selection doesn't exists on the page (that means no other editable element is focused),
@@ -496,7 +496,7 @@ export default class UI extends Module<UINodes> {
    * @param {KeyboardEvent} event - keyboard event
    */
   private enterPressed(event: KeyboardEvent): void {
-    const { BlockManager, BlockSelection, } = this.Editor;
+    const {BlockManager, BlockSelection,} = this.Editor;
     const hasPointerToBlock = BlockManager.currentBlockIndex >= 0;
 
     /**
@@ -527,26 +527,24 @@ export default class UI extends Module<UINodes> {
      * We can create a new block
      */
     if (!this.someToolbarOpened && hasPointerToBlock && (event.target as HTMLElement).tagName === 'BODY') {
-      if (this.config.multiBlock) {
-        /**
-         * Insert the default typed Block
-         */
+      /**
+       * Insert the default typed Block
+       */
 
-        const newBlock = this.Editor.BlockManager.insert();
+      const newBlock = this.Editor.BlockManager.insert();
 
-        this.Editor.Caret.setToBlock(newBlock);
+      this.Editor.Caret.setToBlock(newBlock);
 
-        /**
-         * And highlight
-         */
-        this.Editor.BlockManager.highlightCurrentNode();
+      /**
+       * And highlight
+       */
+      this.Editor.BlockManager.highlightCurrentNode();
 
-        /**
-         * Move toolbar and show plus button because new Block is empty
-         */
-        this.Editor.Toolbar.move();
-        this.Editor.Toolbar.plusButton.show();
-      }
+      /**
+       * Move toolbar and show plus button because new Block is empty
+       */
+      this.Editor.Toolbar.move();
+      this.Editor.Toolbar.plusButton.show();
     }
 
     this.Editor.BlockSelection.clearSelection(event);
@@ -722,7 +720,7 @@ export default class UI extends Module<UINodes> {
    * @param {Event} event - selection event
    */
   private selectionChanged(event: Event): void {
-    const { CrossBlockSelection, BlockSelection } = this.Editor;
+    const {CrossBlockSelection, BlockSelection} = this.Editor;
     const focusedElement = Selection.anchorElement as Element;
 
     if (CrossBlockSelection.isCrossBlockSelectionStarted) {
