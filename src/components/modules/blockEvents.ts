@@ -229,7 +229,7 @@ export default class BlockEvents extends Module {
     /**
      * Allow to create linebreaks by Shift+Enter
      */
-    if (event.shiftKey) {
+    if (event.shiftKey || !this.config.multiBlock) {
       return;
     }
 
