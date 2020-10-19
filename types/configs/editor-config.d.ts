@@ -95,4 +95,9 @@ export interface EditorConfig {
    * Defines default toolbar for all tools.
    */
   inlineToolbar?: string[]|boolean;
+
+  /**
+   * defines if multiple blocks are allowed
+   */
+  multiBlock?: boolean;
 }

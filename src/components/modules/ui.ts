@@ -496,7 +496,7 @@ export default class UI extends Module<UINodes> {
    * @param {KeyboardEvent} event - keyboard event
    */
   private enterPressed(event: KeyboardEvent): void {
-    const { BlockManager, BlockSelection, Caret } = this.Editor;
+    const { BlockManager, BlockSelection, } = this.Editor;
     const hasPointerToBlock = BlockManager.currentBlockIndex >= 0;
 
     /**
@@ -527,23 +527,26 @@ export default class UI extends Module<UINodes> {
      * We can create a new block
      */
     if (!this.someToolbarOpened && hasPointerToBlock && (event.target as HTMLElement).tagName === 'BODY') {
-      /**
-       * Insert the default typed Block
-       */
-      const newBlock = this.Editor.BlockManager.insert();
+      if (this.config.multiBlock) {
+        /**
+         * Insert the default typed Block
+         */
 
-      this.Editor.Caret.setToBlock(newBlock);
+        const newBlock = this.Editor.BlockManager.insert();
 
-      /**
-       * And highlight
-       */
-      this.Editor.BlockManager.highlightCurrentNode();
+        this.Editor.Caret.setToBlock(newBlock);
 
-      /**
-       * Move toolbar and show plus button because new Block is empty
-       */
-      this.Editor.Toolbar.move();
-      this.Editor.Toolbar.plusButton.show();
+        /**
+         * And highlight
+         */
+        this.Editor.BlockManager.highlightCurrentNode();
+
+        /**
+         * Move toolbar and show plus button because new Block is empty
+         */
+        this.Editor.Toolbar.move();
+        this.Editor.Toolbar.plusButton.show();
+      }
     }
 
     this.Editor.BlockSelection.clearSelection(event);
