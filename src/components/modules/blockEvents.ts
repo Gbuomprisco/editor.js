@@ -15,6 +15,7 @@ export default class BlockEvents extends Module {
    *
    * @param {KeyboardEvent} event - keydown
    */
+
   public keydown(event: KeyboardEvent): void {
     /**
      * Run common method for all keydown events
@@ -55,13 +56,6 @@ export default class BlockEvents extends Module {
    * @param {KeyboardEvent} event - keydown
    */
   public beforeKeydownProcessing(event: KeyboardEvent): void {
-    /**
-     * Do not close Toolbox on Tabs or on Enter with opened Toolbox
-     */
-    if (!this.needToolbarClosing(event)) {
-      return;
-    }
-
     /**
      * When user type something:
      *  - close Toolbar
@@ -139,27 +133,6 @@ export default class BlockEvents extends Module {
     }
   }
 
-  /**
-   * Add drop target styles
-   *
-   * @param {DragEvent} event - drag over event
-   */
-  public dragOver(event: DragEvent): void {
-    const block = this.Editor.BlockManager.getBlockByChildNode(event.target as Node);
-
-    block.dropTarget = true;
-  }
-
-  /**
-   * Remove drop target style
-   *
-   * @param {DragEvent} event - drag leave event
-   */
-  public dragLeave(event: DragEvent): void {
-    const block = this.Editor.BlockManager.getBlockByChildNode(event.target as Node);
-
-    block.dropTarget = false;
-  }
 
   /**
    * Copying selected blocks

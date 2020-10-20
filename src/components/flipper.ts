@@ -262,8 +262,5 @@ export default class Flipper {
     if (_.isFunction(this.activateCallback)) {
       this.activateCallback(this.iterator.currentItem);
     }
-
-    event.preventDefault();
-    event.stopPropagation();
   }
 }
