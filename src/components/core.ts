@@ -189,6 +189,7 @@ export default class Core {
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.config.onChange = this.config.onChange || ((): void => {});
     this.config.inlineToolbar = this.config.inlineToolbar !== undefined ? this.config.inlineToolbar : true;
+    this.config.disableBlockOnEnter = this.config.disableBlockOnEnter === undefined ? false : this.config.disableBlockOnEnter;
 
     /**
      * Initialize default Block to pass data to the Renderer

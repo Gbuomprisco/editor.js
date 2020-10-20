@@ -95,4 +95,6 @@ export interface EditorConfig {
    * Defines default toolbar for all tools.
    */
   inlineToolbar?: string[]|boolean;
+
+  disableBlockOnEnter?: boolean;
 }

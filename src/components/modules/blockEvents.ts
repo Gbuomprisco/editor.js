@@ -112,7 +112,7 @@ export default class BlockEvents extends Module {
      */
     this.Editor.BlockSelection.clearSelection(event);
 
-    const { BlockManager, Tools, InlineToolbar, ConversionToolbar } = this.Editor;
+    const {BlockManager, Tools, InlineToolbar, ConversionToolbar} = this.Editor;
     const currentBlock = BlockManager.currentBlock;
 
     if (!currentBlock) {
@@ -141,7 +141,7 @@ export default class BlockEvents extends Module {
    * @param {ClipboardEvent} event - clipboard event
    */
   public handleCommandC(event: ClipboardEvent): void {
-    const { BlockSelection } = this.Editor;
+    const {BlockSelection} = this.Editor;
 
     if (!BlockSelection.anyBlockSelected) {
       return;
@@ -157,7 +157,7 @@ export default class BlockEvents extends Module {
    * @param {ClipboardEvent} event - clipboard event
    */
   public handleCommandX(event: ClipboardEvent): void {
-    const { BlockSelection, BlockManager, Caret } = this.Editor;
+    const {BlockSelection, BlockManager, Caret} = this.Editor;
 
     if (!BlockSelection.anyBlockSelected) {
       return;
@@ -179,9 +179,15 @@ export default class BlockEvents extends Module {
    * @param {KeyboardEvent} event - keydown
    */
   private enter(event: KeyboardEvent): void {
-    const { BlockManager, Tools, UI } = this.Editor;
+    const {BlockManager, Tools, UI} = this.Editor;
     const currentBlock = BlockManager.currentBlock;
     const tool = Tools.available[currentBlock.name];
+
+    if (this.config.disableBlockOnEnter) {
+      event.preventDefault();
+
+      return;
+    }
 
     /**
      * Don't handle Enter keydowns when Tool sets enableLineBreaks to true.
@@ -247,7 +253,7 @@ export default class BlockEvents extends Module {
    * @param {KeyboardEvent} event - keydown
    */
   private backspace(event: KeyboardEvent): void {
-    const { BlockManager, BlockSelection, Caret } = this.Editor;
+    const {BlockManager, BlockSelection, Caret} = this.Editor;
     const currentBlock = BlockManager.currentBlock;
     const tool = this.Editor.Tools.available[currentBlock.name];
 
@@ -314,7 +320,7 @@ export default class BlockEvents extends Module {
    * Merge current and previous Blocks if they have the same type
    */
   private mergeBlocks(): void {
-    const { BlockManager, Caret, Toolbar } = this.Editor;
+    const {BlockManager, Caret, Toolbar} = this.Editor;
     const targetBlock = BlockManager.previousBlock;
     const blockToMerge = BlockManager.currentBlock;
 
@@ -475,10 +481,10 @@ export default class BlockEvents extends Module {
    */
   private needToolbarClosing(event: KeyboardEvent): boolean {
     const toolboxItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.Toolbox.opened),
-        blockSettingsItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.BlockSettings.opened),
-        inlineToolbarItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.InlineToolbar.opened),
-        conversionToolbarItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.ConversionToolbar.opened),
-        flippingToolbarItems = event.keyCode === _.keyCodes.TAB;
+      blockSettingsItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.BlockSettings.opened),
+      inlineToolbarItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.InlineToolbar.opened),
+      conversionToolbarItemSelected = (event.keyCode === _.keyCodes.ENTER && this.Editor.ConversionToolbar.opened),
+      flippingToolbarItems = event.keyCode === _.keyCodes.TAB;
 
     /**
      * Do not close Toolbar in cases:
