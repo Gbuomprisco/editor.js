@@ -35,7 +35,7 @@ import * as _ from '../utils';
  * }
  */
 
-import sanitizeHTML, { IOptions } from 'sanitize-html';
+import { IOptions } from 'sanitize-html';
 import { BlockToolData, InlineToolConstructable, SanitizerConfig } from '../../../types';
 import { SavedData } from '../../../types/data-formats';
 
@@ -123,9 +123,7 @@ export default class Sanitizer extends Module {
    * @returns {string} clean HTML
    */
   public clean(taintString: string, customConfig: IOptions = {} as IOptions): string {
-    const value = typeof taintString !== 'string' ? '' : taintString;
-
-    return sanitizeHTML(value, customConfig);
+    return taintString;
   }
 
   /**
