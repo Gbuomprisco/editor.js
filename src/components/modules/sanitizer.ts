@@ -126,7 +126,7 @@ export default class Sanitizer extends Module {
     try {
       const value = typeof taintString !== 'string' ? '' : taintString;
 
-      return sanitizeHTML(value, customConfig);
+      return sanitizeHTML(value, customConfig || {});
     } catch (e) {
       console.warn(`Validation failed`, e);
     }

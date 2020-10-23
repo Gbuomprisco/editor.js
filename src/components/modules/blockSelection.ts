@@ -12,6 +12,7 @@ import $ from '../dom';
 
 import SelectionUtils from '../selection';
 import { SanitizerConfig } from '../../../types/configs';
+import { IOptions } from 'sanitize-html';
 
 /**
  *
@@ -31,31 +32,8 @@ export default class BlockSelection extends Module {
    *
    * @returns {SanitizerConfig}
    */
-  private get sanitizerConfig(): SanitizerConfig {
-    return {
-      p: {},
-      h1: {},
-      h2: {},
-      h3: {},
-      h4: {},
-      h5: {},
-      h6: {},
-      ol: {},
-      ul: {},
-      li: {},
-      br: true,
-      img: {
-        src: true,
-        width: true,
-        height: true,
-      },
-      a: {
-        href: true,
-      },
-      b: {},
-      i: {},
-      u: {},
-    };
+  private get sanitizerConfig(): IOptions {
+    return this.config.sanitizer || {};
   }
 
   /**
