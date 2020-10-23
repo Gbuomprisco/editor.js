@@ -130,10 +130,13 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
      * Conversion flipper will be activated after dropdown will open
      */
     setTimeout(() => {
-      this.flipper.activate(Object.values(this.tools).filter((button) => {
-        return !button.classList.contains(ConversionToolbar.CSS.conversionToolHidden);
-      }));
-      this.flipper.focusFirst();
+      if (this.flipper) {
+        this.flipper.activate(Object.values(this.tools).filter((button) => {
+          return !button.classList.contains(ConversionToolbar.CSS.conversionToolHidden);
+        }));
+
+        this.flipper.focusFirst();
+      }
 
       if (_.isFunction(this.togglingCallback)) {
         this.togglingCallback(true);

@@ -123,7 +123,9 @@ export default class Sanitizer extends Module {
    * @returns {string} clean HTML
    */
   public clean(taintString: string, customConfig: IOptions = {} as IOptions): string {
-    return sanitizeHTML(taintString, customConfig);
+    const value = typeof taintString !== 'string' ? '' : taintString;
+
+    return sanitizeHTML(value, customConfig);
   }
 
   /**
