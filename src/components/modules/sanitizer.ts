@@ -35,7 +35,7 @@ import * as _ from '../utils';
  * }
  */
 
-import { IOptions } from 'sanitize-html';
+import sanitizeHTML, { IOptions } from 'sanitize-html';
 import { BlockToolData, InlineToolConstructable, SanitizerConfig } from '../../../types';
 import { SavedData } from '../../../types/data-formats';
 
@@ -123,7 +123,13 @@ export default class Sanitizer extends Module {
    * @returns {string} clean HTML
    */
   public clean(taintString: string, customConfig: IOptions = {} as IOptions): string {
-    return taintString;
+    try {
+      const value = typeof taintString !== 'string' ? '' : taintString;
+
+      return sanitizeHTML(value, customConfig);
+    } catch (e) {
+      console.warn(`Validation failed`, e);
+    }
   }
 
   /**
@@ -256,6 +262,10 @@ export default class Sanitizer extends Module {
 
     for (const fieldName in object) {
       if (!Object.prototype.hasOwnProperty.call(object, fieldName)) {
+        continue;
+      }
+
+      if (fieldName === 'alignment') {
         continue;
       }
 
