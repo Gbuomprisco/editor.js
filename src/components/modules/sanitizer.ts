@@ -35,7 +35,7 @@ import * as _ from '../utils';
  * }
  */
 
-import sanitizeHTML, { IOptions } from 'sanitize-html';
+import HTMLJanitor from 'html-janitor';
 import { BlockToolData, InlineToolConstructable, SanitizerConfig } from '../../../types';
 import { SavedData } from '../../../types/data-formats';
 
@@ -46,12 +46,12 @@ export default class Sanitizer extends Module {
   /**
    * Memoize tools config
    */
-  private configCache: {[toolName: string]: IOptions} = {};
+  private configCache: {[toolName: string]: SanitizerConfig} = {};
 
   /**
    * Cached inline tools config
    */
-  private inlineToolsConfigCache: IOptions | null = null;
+  private inlineToolsConfigCache: SanitizerConfig | null = null;
 
   /**
    * Sanitize Blocks
@@ -82,7 +82,7 @@ export default class Sanitizer extends Module {
    * @param {BlockToolData|object|*} dataToSanitize - taint string or object/array that contains taint string
    * @param {SanitizerConfig} rules - object with sanitizer rules
    */
-  public deepSanitize(dataToSanitize: object | string, rules: IOptions): object | string {
+  public deepSanitize(dataToSanitize: object | string, rules: SanitizerConfig): object | string {
     /**
      * BlockData It may contain 3 types:
      *  - Array
@@ -98,7 +98,7 @@ export default class Sanitizer extends Module {
       /**
        * Objects: just clean object deeper.
        */
-      return this.cleanObject(dataToSanitize);
+      return this.cleanObject(dataToSanitize, rules);
     } else {
       /**
        * Primitives (number|string|boolean): clean this item
@@ -122,14 +122,17 @@ export default class Sanitizer extends Module {
    *
    * @returns {string} clean HTML
    */
-  public clean(taintString: string, customConfig: IOptions = {} as IOptions): string {
-    try {
-      const value = typeof taintString !== 'string' ? '' : taintString;
+  public clean(taintString: string, customConfig: SanitizerConfig = {} as SanitizerConfig): string {
+    const sanitizerConfig = {
+      tags: customConfig,
+    };
 
-      return sanitizeHTML(value, customConfig || {});
-    } catch (e) {
-      console.warn(`Validation failed`, e);
-    }
+    /**
+     * API client can use custom config to manage sanitize process
+     */
+    const sanitizerInstance = this.createHTMLJanitorInstance(sanitizerConfig);
+
+    return sanitizerInstance.clean(taintString);
   }
 
   /**
@@ -139,7 +142,7 @@ export default class Sanitizer extends Module {
    *
    * @returns {SanitizerConfig}
    */
-  public composeToolConfig(toolName: string): IOptions {
+  public composeToolConfig(toolName: string): SanitizerConfig {
     /**
      * If cache is empty, then compose tool config and put it to the cache object
      */
@@ -160,7 +163,7 @@ export default class Sanitizer extends Module {
 
     const toolRules = toolClass.sanitize;
 
-    const toolConfig = {} as IOptions;
+    const toolConfig = {} as SanitizerConfig;
 
     for (const fieldName in toolRules) {
       if (Object.prototype.hasOwnProperty.call(toolRules, fieldName)) {
@@ -185,12 +188,12 @@ export default class Sanitizer extends Module {
    *
    * @param {string} name - Inline Tool name
    */
-  public getInlineToolsConfig(name: string): IOptions {
+  public getInlineToolsConfig(name: string): SanitizerConfig {
     const { Tools } = this.Editor;
     const toolsConfig = Tools.getToolSettings(name);
     const enableInlineTools = toolsConfig.inlineToolbar || [];
 
-    let config = {} as IOptions;
+    let config = {} as SanitizerConfig;
 
     if (typeof enableInlineTools === 'boolean' && enableInlineTools) {
       /**
@@ -205,7 +208,7 @@ export default class Sanitizer extends Module {
         config = Object.assign(
           config,
           Tools.inline[inlineToolName][Tools.INTERNAL_SETTINGS.SANITIZE_CONFIG]
-        ) as IOptions;
+        ) as SanitizerConfig;
       });
     }
 
@@ -221,14 +224,14 @@ export default class Sanitizer extends Module {
   /**
    * Return general config for all inline tools
    */
-  public getAllInlineToolsConfig(): IOptions {
+  public getAllInlineToolsConfig(): SanitizerConfig {
     const { Tools } = this.Editor;
 
     if (this.inlineToolsConfigCache) {
       return this.inlineToolsConfigCache;
     }
 
-    const config: IOptions = {} as IOptions;
+    const config: SanitizerConfig = {} as SanitizerConfig;
 
     Object.entries(Tools.inline)
       .forEach(([, inlineTool]: [string, InlineToolConstructable]) => {
@@ -246,7 +249,7 @@ export default class Sanitizer extends Module {
    * @param {Array} array - [1, 2, {}, []]
    * @param {SanitizerConfig} ruleForItem - sanitizer config for array
    */
-  private cleanArray(array: Array<object | string>, ruleForItem: IOptions): Array<object | string> {
+  private cleanArray(array: Array<object | string>, ruleForItem: SanitizerConfig): Array<object | string> {
     return array.map((arrayItem) => this.deepSanitize(arrayItem, ruleForItem));
   }
 
@@ -254,9 +257,10 @@ export default class Sanitizer extends Module {
    * Clean object
    *
    * @param {object} object  - {level: 0, text: 'adada', items: [1,2,3]}}
+   * @param {object} rules - { b: true } or true|false
    * @returns {object}
    */
-  private cleanObject(object: object): object {
+  private cleanObject(object: object, rules: SanitizerConfig|{[field: string]: SanitizerConfig}): object {
     const cleanData = {};
 
     for (const fieldName in object) {
@@ -264,14 +268,16 @@ export default class Sanitizer extends Module {
         continue;
       }
 
-      if (fieldName === 'alignment') {
-        continue;
-      }
-
       const currentIterationItem = object[fieldName];
-      const sanitizerConfig = this.config.sanitizer;
 
-      cleanData[fieldName] = this.deepSanitize(currentIterationItem, sanitizerConfig);
+      /**
+       *  Get object from config by field name
+       *   - if it is a HTML Janitor rule, call with this rule
+       *   - otherwise, call with parent's config
+       */
+      const ruleForItem = this.isRule(rules[fieldName] as SanitizerConfig) ? rules[fieldName] : rules;
+
+      cleanData[fieldName] = this.deepSanitize(currentIterationItem, ruleForItem as SanitizerConfig);
     }
 
     return cleanData;
@@ -285,11 +291,11 @@ export default class Sanitizer extends Module {
    *
    * @returns {string}
    */
-  private cleanOneItem(taintString: string, rule: IOptions|boolean): string {
+  private cleanOneItem(taintString: string, rule: SanitizerConfig|boolean): string {
     if (typeof rule === 'object') {
       return this.clean(taintString, rule);
     } else if (rule === false) {
-      return this.clean(taintString, {} as IOptions);
+      return this.clean(taintString, {} as SanitizerConfig);
     } else {
       return taintString;
     }
@@ -317,4 +323,11 @@ export default class Sanitizer extends Module {
    *
    * @param {SanitizerConfig} config - sanitizer extension
    */
+  private createHTMLJanitorInstance(config: {tags: SanitizerConfig}): HTMLJanitor|null {
+    if (config) {
+      return new HTMLJanitor(config);
+    }
+
+    return null;
+  }
 }

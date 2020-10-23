@@ -38,7 +38,6 @@
     "@babel/register": "^7.9.0",
     "@babel/runtime": "^7.9.2",
     "@codexteam/shortcuts": "^1.1.1",
-    "@types/sanitize-html": "^1.27.0",
     "@types/webpack": "^4.41.12",
     "@types/webpack-env": "^1.15.2",
     "babel-loader": "^8.1.0",
@@ -76,7 +75,6 @@
   },
   "dependencies": {
     "codex-notifier": "^1.1.2",
-    "codex-tooltip": "^1.0.1",
-    "sanitize-html": "1.27.5"
+    "codex-tooltip": "^1.0.1"
   }
 }

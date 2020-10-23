@@ -121,6 +121,7 @@ export default class Core {
     }
 
     /**
+     *
      * If holderId is preset, assign him to holder property and work next only with holder
      */
     _.deprecationAssert(!!config.holderId, 'config.holderId', 'config.holder');
@@ -180,6 +181,7 @@ export default class Core {
       a: true,
     } as SanitizerConfig;
 
+
     this.config.hideToolbar = this.config.hideToolbar ? this.config.hideToolbar : false;
     this.config.tools = this.config.tools || {};
     this.config.i18n = this.config.i18n || {};
@@ -204,7 +206,6 @@ export default class Core {
     }
 
     this.config.readOnly = this.config.readOnly as boolean || false;
-    this.config.i18n = {};
 
     /**
      * Adjust i18n
@@ -217,15 +218,6 @@ export default class Core {
      * Text direction. If not set, uses ltr
      */
     this.config.i18n.direction = config.i18n?.direction || 'ltr';
-
-    /**
-     * Text direction. If not set, uses ltr
-     */
-    if (config.i18n?.direction) {
-      this.config.i18n = {
-        direction: config.i18n?.direction || 'ltr',
-      };
-    }
   }
 
   /**
