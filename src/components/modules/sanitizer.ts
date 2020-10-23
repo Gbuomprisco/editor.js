@@ -98,7 +98,7 @@ export default class Sanitizer extends Module {
       /**
        * Objects: just clean object deeper.
        */
-      return this.cleanObject(dataToSanitize, rules);
+      return this.cleanObject(dataToSanitize);
     } else {
       /**
        * Primitives (number|string|boolean): clean this item
@@ -254,10 +254,9 @@ export default class Sanitizer extends Module {
    * Clean object
    *
    * @param {object} object  - {level: 0, text: 'adada', items: [1,2,3]}}
-   * @param {object} rules - { b: true } or true|false
    * @returns {object}
    */
-  private cleanObject(object: object, rules: IOptions|{[field: string]: IOptions}): object {
+  private cleanObject(object: object): object {
     const cleanData = {};
 
     for (const fieldName in object) {
@@ -270,15 +269,9 @@ export default class Sanitizer extends Module {
       }
 
       const currentIterationItem = object[fieldName];
+      const sanitizerConfig = this.config.sanitizer;
 
-      /**
-       *  Get object from config by field name
-       *   - if it is a HTML Janitor rule, call with this rule
-       *   - otherwise, call with parent's config
-       */
-      const ruleForItem = this.isRule(rules[fieldName] as SanitizerConfig) ? rules[fieldName] : rules;
-
-      cleanData[fieldName] = this.deepSanitize(currentIterationItem, ruleForItem as SanitizerConfig);
+      cleanData[fieldName] = this.deepSanitize(currentIterationItem, sanitizerConfig);
     }
 
     return cleanData;
