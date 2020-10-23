@@ -599,12 +599,16 @@ export default class BlockManager extends Module {
    *
    * @returns {Block}
    */
-  public getBlockByChildNode(childNode: Node): Block {
+  public getBlockByChildNode(childNode: Node): Block | undefined {
     /**
      * If node is Text TextNode
      */
     if (!$.isElement(childNode)) {
       childNode = childNode.parentNode;
+    }
+
+    if (!childNode) {
+      return;
     }
 
     const firstLevelBlock = (childNode as HTMLElement).closest(`.${Block.CSS.wrapper}`);
