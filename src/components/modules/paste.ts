@@ -307,7 +307,7 @@ export default class Paste extends Module {
         return;
       }
 
-      if (typeof toolInstance.onPaste !== 'function') {
+      if (!_.isFunction(toolInstance.onPaste)) {
         return;
       }
 
@@ -763,9 +763,10 @@ export default class Paste extends Module {
    * @returns {void}
    */
   private insertEditorJSData(blocks: Array<Pick<SavedData, 'data' | 'tool'>>): void {
-    const { BlockManager, Tools } = this.Editor;
+    const { BlockManager, Sanitizer, Tools } = this.Editor;
+    const sanitizedBlocks = Sanitizer.sanitizeBlocks(blocks);
 
-    blocks.forEach(({ tool, data }, i) => {
+    sanitizedBlocks.forEach(({ tool, data }, i) => {
       let needToReplaceCurrentBlock = false;
 
       if (i === 0) {

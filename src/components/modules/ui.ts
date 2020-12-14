@@ -193,7 +193,7 @@ export default class UI extends Module<UINodes> {
    * Check if Editor is empty and set CSS class to wrapper
    */
   public checkEmptiness(): void {
-    const {BlockManager} = this.Editor;
+    const { BlockManager } = this.Editor;
 
     this.nodes.wrapper.classList.toggle(this.CSS.editorEmpty, BlockManager.isEditorEmpty);
   }
@@ -205,7 +205,7 @@ export default class UI extends Module<UINodes> {
    * @returns {boolean}
    */
   public get someToolbarOpened(): boolean {
-    const {Toolbox, BlockSettings, InlineToolbar, ConversionToolbar} = this.Editor;
+    const { Toolbox, BlockSettings, InlineToolbar, ConversionToolbar } = this.Editor;
 
     return BlockSettings.opened || InlineToolbar.opened || ConversionToolbar.opened || Toolbox.opened;
   }
@@ -233,7 +233,7 @@ export default class UI extends Module<UINodes> {
    * Close all Editor's toolbars
    */
   public closeAllToolbars(): void {
-    const {Toolbox, BlockSettings, InlineToolbar, ConversionToolbar} = this.Editor;
+    const { Toolbox, BlockSettings, InlineToolbar, ConversionToolbar } = this.Editor;
 
     BlockSettings.close();
     InlineToolbar.close();
@@ -264,7 +264,7 @@ export default class UI extends Module<UINodes> {
      */
     this.nodes.wrapper = $.make('div', [
       this.CSS.editorWrapper,
-      ...(this.isRtl ? [this.CSS.editorRtlFix] : []),
+      ...(this.isRtl ? [ this.CSS.editorRtlFix ] : []),
     ]);
     this.nodes.redactor = $.make('div', this.CSS.editorZone);
 
@@ -405,7 +405,7 @@ export default class UI extends Module<UINodes> {
    * @param {KeyboardEvent} event - keyboard event
    */
   private defaultBehaviour(event: KeyboardEvent): void {
-    const {currentBlock} = this.Editor.BlockManager;
+    const { currentBlock } = this.Editor.BlockManager;
     const keyDownOnEditor = (event.target as HTMLElement).closest(`.${this.CSS.editorWrapper}`);
     const isMetaKey = event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
 
@@ -440,7 +440,7 @@ export default class UI extends Module<UINodes> {
    * @param {KeyboardEvent} event - keyboard event
    */
   private backspacePressed(event: KeyboardEvent): void {
-    const {BlockManager, BlockSelection, Caret} = this.Editor;
+    const { BlockManager, BlockSelection, Caret } = this.Editor;
 
     /**
      * If any block selected and selection doesn't exists on the page (that means no other editable element is focused),
@@ -496,7 +496,7 @@ export default class UI extends Module<UINodes> {
    * @param {KeyboardEvent} event - keyboard event
    */
   private enterPressed(event: KeyboardEvent): void {
-    const {BlockManager, BlockSelection,} = this.Editor;
+    const { BlockManager, BlockSelection } = this.Editor;
     const hasPointerToBlock = BlockManager.currentBlockIndex >= 0;
 
     /**
@@ -720,8 +720,8 @@ export default class UI extends Module<UINodes> {
    * @param {Event} event - selection event
    */
   private selectionChanged(event: Event): void {
-    const {CrossBlockSelection, BlockSelection} = this.Editor;
-    const focusedElement = Selection.anchorElement as Element;
+    const { CrossBlockSelection, BlockSelection } = this.Editor;
+    const focusedElement = Selection.anchorElement;
 
     if (CrossBlockSelection.isCrossBlockSelectionStarted) {
       // Removes all ranges when any Block is selected
@@ -743,6 +743,13 @@ export default class UI extends Module<UINodes> {
       }
 
       return;
+    }
+
+    /**
+     * Set current block when entering to Editor.js by tab key
+     */
+    if (!this.Editor.BlockManager.currentBlock) {
+      this.Editor.BlockManager.setCurrentBlockByChildNode(focusedElement);
     }
 
     /**

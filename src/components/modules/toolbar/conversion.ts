@@ -95,7 +95,14 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
    * Deactivates flipper and removes all nodes
    */
   public destroy(): void {
-    this.deactivateFlipper();
+    /**
+     * Sometimes (in read-only mode) there is no Flipper
+     */
+    if (this.flipper) {
+      this.flipper.deactivate();
+      this.flipper = null;
+    }
+
     this.removeAllNodes();
   }
 
@@ -211,7 +218,7 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
 
     if (_.isFunction(exportProp)) {
       exportData = exportProp(blockData);
-    } else if (typeof exportProp === 'string') {
+    } else if (_.isString(exportProp)) {
       exportData = blockData[exportProp];
     } else {
       _.log('Conversion «export» property must be a string or function. ' +
@@ -238,7 +245,7 @@ export default class ConversionToolbar extends Module<ConversionToolbarNodes> {
 
     if (_.isFunction(importProp)) {
       newBlockData = importProp(cleaned);
-    } else if (typeof importProp === 'string') {
+    } else if (_.isString(importProp)) {
       newBlockData[importProp] = cleaned;
     } else {
       _.log('Conversion «import» property must be a string or function. ' +

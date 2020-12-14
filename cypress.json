@@ -1,0 +1,9 @@
+{
+  "env": {
+  },
+  "fixturesFolder": "test/cypress/fixtures",
+  "integrationFolder": "test/cypress/tests",
+  "screenshotsFolder": "test/cypress/screenshots",
+  "videosFolder": "test/cypress/videos",
+  "supportFile": "test/cypress/support/index.ts"
+}
