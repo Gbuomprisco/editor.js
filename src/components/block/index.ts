@@ -103,7 +103,6 @@ export default class Block {
       content: 'ce-block__content',
       focused: 'ce-block--focused',
       selected: 'ce-block--selected',
-      dropTarget: 'ce-block--drop-target',
     };
   }
 
@@ -454,15 +453,6 @@ export default class Block {
    */
   public get stretched(): boolean {
     return this.holder.classList.contains(Block.CSS.wrapperStretched);
-  }
-
-  /**
-   * Toggle drop target state
-   *
-   * @param {boolean} state - 'true' if block is drop target, false otherwise
-   */
-  public set dropTarget(state) {
-    this.holder.classList.toggle(Block.CSS.dropTarget, state);
   }
 
   /**
