@@ -4,6 +4,7 @@
   top: 30px;
   min-width: 114px;
   box-sizing: content-box;
+  z-index: 999999;
 
   @media (--mobile){
     bottom: 40px;
@@ -33,9 +34,17 @@
     &:not(:empty){
       padding: 3px 3px 0;
     }
+
+     > div {
+       height: 34px;
+       display: flex;
+     }
   }
 
   &__default-zone {
+     height: 34px;
+     display: flex;
+
     &:not(:empty){
       padding: 3px;
     }
